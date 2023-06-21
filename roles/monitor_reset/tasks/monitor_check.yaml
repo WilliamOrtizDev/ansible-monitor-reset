@@ -1,0 +1,14 @@
+- name: Set facts
+  ansible.builtin.set_fact:
+    desktop: '{{ desktop }}'
+
+- name: Identify Displays
+  ansible.builtin.script:
+    cmd: monitor_check.sh
+  changed_when: false
+  run_once: true
+  register: displays
+
+- name: Print Displays
+  ansible.builtin.debug:
+    msg: '{{ displays.stdout_lines }}'

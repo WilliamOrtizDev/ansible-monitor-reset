@@ -1,0 +1,9 @@
+Section "Monitor"
+    Identifier  "{{ primarydisplay }}"
+    Option      " Primary" " true"
+EndSection
+
+Section "Monitor"
+    Identifier  "{{ secondarydisplay }}"
+    Option      "RightOf" "{{ primarydisplay }}"
+EndSection

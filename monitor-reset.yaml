@@ -1,0 +1,57 @@
+---
+- name: Identify Displays
+  hosts: desktops
+  become: true
+  strategy: linear
+  vars_prompt:
+    - name: desktop
+      prompt: 'Hostname of the desktop that needs Monitors reset'
+      private: false
+
+  pre_tasks:
+    - name: Check user input
+      ansible.builtin.assert:
+        that: desktop in groups.desktops
+        fail_msg: 'Desktop entered does not exist'
+        quiet: true
+      run_once: true
+
+  tasks:
+    - name: Monitor Check
+      when: ansible_host == desktop
+      ansible.builtin.include_role:
+        name: monitor_reset
+        tasks_from: monitor_check
+
+- name: Resolve Monitor order
+  hosts: desktops
+  become: true
+  strategy: linear
+  gather_facts: false
+  vars_prompt:
+    - name: primarydisplay
+      prompt: 'Which output should be the primary display'
+      unsafe: true
+      private: false
+
+    - name: secondarydisplay
+      prompt: 'What output should be the secondary display'
+      unsafe: true
+      private: false
+
+  pre_tasks:
+    - name: Check user inputs
+      ansible.builtin.assert:
+        that: "'{{ item }}' in displays.stdout"
+        fail_msg: '{{ item }} output does not exist on {{ ansible_host }}'
+        quiet: true
+      run_once: true
+      with_items:
+        - '{{ primarydisplay }}'
+        - '{{ secondarydisplay }}'
+
+  tasks:
+    - name: Resolve Monitor order
+      when: desktop is defined and ansible_host == desktop
+      ansible.builtin.include_role:
+        name: monitor_reset

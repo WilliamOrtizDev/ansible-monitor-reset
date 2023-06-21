@@ -1,0 +1,9 @@
+- name: Import display config
+  ansible.builtin.template:
+    src: 10-monitor.conf.j2
+    dest: /etc/X11/xorg.conf.d/10-monitor.conf
+    owner: root
+    group: root
+    mode: '644'
+    backup: true
+  notify: Restart-GDM
