@@ -12,7 +12,7 @@
     - name: Check user input
       ansible.builtin.assert:
         that: desktop in groups.desktops
-        fail_msg: 'Desktop entered does not exist'
+        fail_msg: 'Desktop entered does not exist.'
         quiet: true
       run_once: true
 
@@ -43,7 +43,7 @@
     - name: Check user inputs
       ansible.builtin.assert:
         that: "'{{ item }}' in displays.stdout"
-        fail_msg: '{{ item }} output does not exist on {{ ansible_host }}'
+        fail_msg: '{{ item }} output does not exist on {{ ansible_host }}.'
         quiet: true
       run_once: true
       with_items:
